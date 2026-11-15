@@ -55,7 +55,7 @@
 | `status` | TEXT | `want` / `watching` / `watched` / `dropped` |
 | `rating` | REAL | 当前评分 0–10，可空 |
 | `source` | TEXT | `manual` / `sample` |
-| `tmdb_id` / `imdb_id` | TEXT | 外部编号，可空，预留给以后去重 |
+| `tmdb_id` / `imdb_id` | TEXT | 外部编号，可空；示例数据载入时填 TMDB 和 IMDb 编号，以后可用来去重 |
 | `created_at` / `updated_at` | INTEGER | 毫秒时间戳 |
 
 **`watch_record`：一次观看记录**
