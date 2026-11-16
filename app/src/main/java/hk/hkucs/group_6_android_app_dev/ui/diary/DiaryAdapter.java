@@ -47,12 +47,20 @@ class DiaryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_DATE = 1;
     private static final int TYPE_RECORD = 2;
     private static final int TYPE_EMPTY = 3;
+    /**
+     * Marks heatmap-only updates so RecyclerView rebinds the same card instead of cross-fading
+     * to a second copy, which would restart the reveal and lose the heatmap's scroll position.
+     */
+    private static final Object HEATMAP_CHANGED = new Object();
 
     private final Listener listener;
     private List<DiaryViewModel.Row> rows = Collections.emptyList();
     private Map<String, Integer> dailyCounts = Collections.emptyMap();
     @Nullable
     private String selectedDate;
+    private Calendar today = Calendar.getInstance();
+    /** On the heatmap's next bind, scroll back to today and replay the reveal. */
+    private boolean heatmapRefreshed;
     private boolean loaded;
 
     DiaryAdapter(@NonNull Listener listener) {
@@ -67,12 +75,27 @@ class DiaryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     void setDailyCounts(@Nullable Map<String, Integer> counts) {
         dailyCounts = counts == null ? Collections.emptyMap() : counts;
-        notifyItemChanged(0);
+        notifyItemChanged(0, HEATMAP_CHANGED);
     }
 
     void setSelectedDate(@Nullable String date) {
         selectedDate = date;
-        notifyItemChanged(0);
+        notifyItemChanged(0, HEATMAP_CHANGED);
+    }
+
+    /** The heatmap's last day. */
+    void setToday(@Nullable Calendar day) {
+        if (day == null) {
+            return;
+        }
+        today = (Calendar) day.clone();
+        notifyItemChanged(0, HEATMAP_CHANGED);
+    }
+
+    /** Shows that the page was refreshed: the heatmap scrolls back to today and sweeps in. */
+    void playRefresh() {
+        heatmapRefreshed = true;
+        notifyItemChanged(0, HEATMAP_CHANGED);
     }
 
     /** Adapter position of a date's header, or -1 when that day has no records. */
@@ -126,7 +149,9 @@ class DiaryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeatmapHolder) {
-            ((HeatmapHolder) holder).bind(dailyCounts, selectedDate, listener);
+            ((HeatmapHolder) holder).bind(dailyCounts, selectedDate, today,
+                    heatmapRefreshed, listener);
+            heatmapRefreshed = false;
         } else if (holder instanceof DateHolder) {
             ((DateHolder) holder).bind(rows.get(position - 1));
         } else if (holder instanceof RecordHolder) {
@@ -163,13 +188,18 @@ class DiaryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             addLegendCells(view.getContext(), view.findViewById(R.id.diary_legend_cells));
         }
 
-        void bind(Map<String, Integer> counts, @Nullable String selected, Listener listener) {
+        void bind(Map<String, Integer> counts, @Nullable String selected, Calendar today,
+                boolean refreshed, Listener listener) {
+            heatmap.setToday(today);
             heatmap.setData(counts);
             heatmap.setSelectedDate(selected);
             heatmap.setOnDayClickListener(listener::onDayClick);
             summary.setText(heatmap.getContentDescription());
-            bindStats(DiaryStats.from(counts, Calendar.getInstance()), listener);
-            if (!scrolledToToday) {
+            bindStats(DiaryStats.from(counts, today), listener);
+            if (refreshed) {
+                heatmap.replayReveal();
+            }
+            if (!scrolledToToday || refreshed) {
                 scrolledToToday = true;
                 // Today is in the last column, so start scrolled to the right edge.
                 scroll.post(() -> scroll.fullScroll(View.FOCUS_RIGHT));

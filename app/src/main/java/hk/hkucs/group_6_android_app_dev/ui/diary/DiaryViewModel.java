@@ -42,6 +42,7 @@ public class DiaryViewModel extends AndroidViewModel {
         }
     }
 
+    private final MutableLiveData<Calendar> today = new MutableLiveData<>(Calendar.getInstance());
     private final LiveData<Map<String, Integer>> dailyCounts;
     private final LiveData<List<Row>> rows;
     private final MutableLiveData<String> selectedDate = new MutableLiveData<>();
@@ -49,10 +50,17 @@ public class DiaryViewModel extends AndroidViewModel {
     public DiaryViewModel(@NonNull Application application) {
         super(application);
         MediaRepository repo = MediaRepository.get(application);
-        Calendar today = Calendar.getInstance();
-        dailyCounts = repo.observeDailyCounts(HeatmapView.firstDay(today),
-                HeatmapView.format(today));
-        rows = Transformations.map(repo.observeTimeline(), DiaryViewModel::toRows);
+        // Each new "today" runs both queries again, so refresh() also moves the year forward
+        // when the page was left open past midnight.
+        dailyCounts = Transformations.switchMap(today, day -> repo.observeDailyCounts(
+                HeatmapView.firstDay(day), HeatmapView.format(day)));
+        rows = Transformations.switchMap(today, day ->
+                Transformations.map(repo.observeTimeline(), DiaryViewModel::toRows));
+    }
+
+    /** The last day of the heatmap; changes on {@link #refresh()}. */
+    public LiveData<Calendar> getToday() {
+        return today;
     }
 
     public LiveData<Map<String, Integer>> getDailyCounts() {
@@ -70,6 +78,12 @@ public class DiaryViewModel extends AndroidViewModel {
 
     public void selectDate(@Nullable String date) {
         selectedDate.setValue(date);
+    }
+
+    /** Reloads the heatmap and timeline as of now and clears the picked day. */
+    public void refresh() {
+        selectedDate.setValue(null);
+        today.setValue(Calendar.getInstance());
     }
 
     /** Groups records (newest first) under one header per date. */

@@ -1,6 +1,8 @@
 package hk.hkucs.group_6_android_app_dev;
 
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.view.ViewConfiguration;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.IdRes;
@@ -18,14 +20,23 @@ import hk.hkucs.group_6_android_app_dev.ui.home.HomeFragment;
 import hk.hkucs.group_6_android_app_dev.ui.library.LibraryFragment;
 import hk.hkucs.group_6_android_app_dev.ui.diary.DiaryFragment;
 import hk.hkucs.group_6_android_app_dev.ui.profile.ProfileFragment;
+import hk.hkucs.group_6_android_app_dev.util.DoubleTapTracker;
 
 /** Owns the four top-level destinations; feature pages own their own content. */
 public class MainActivity extends AppCompatActivity {
+    /** A top-level page that reacts when its tab is double-tapped, e.g. back to top and refresh. */
+    public interface OnTabDoubleTapListener {
+        void onTabDoubleTap();
+    }
+
     private static final String STATE_TAB = "selected_tab";
     private static final int[] TABS = {R.id.nav_home, R.id.nav_library, R.id.nav_diary, R.id.nav_profile};
     private int selectedTab = R.id.nav_home;
     private BottomNavigationView navigation;
     private OnBackPressedCallback backToHome;
+    // Clicks fire on finger-up, so allow the system double-tap gap plus one press.
+    private final DoubleTapTracker tabTaps = new DoubleTapTracker(
+            ViewConfiguration.getDoubleTapTimeout() + ViewConfiguration.getTapTimeout());
 
     @Override protected void onCreate(Bundle state) {
         super.onCreate(state);
@@ -43,9 +54,17 @@ public class MainActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, backToHome);
         navigation = findViewById(R.id.bottom_navigation);
         int restored = state == null ? R.id.nav_home : state.getInt(STATE_TAB, R.id.nav_home);
-        navigation.setOnItemSelectedListener(item -> showTab(item.getItemId()));
-        // Reselection must not add a second instance or change the current page state.
-        navigation.setOnItemReselectedListener(item -> { });
+        navigation.setOnItemSelectedListener(item -> {
+            // Switching to a tab counts as the first tap, so a double tap works from any tab.
+            tabTaps.onTap(item.getItemId(), SystemClock.uptimeMillis());
+            return showTab(item.getItemId());
+        });
+        // A single reselection keeps the page as it is; a double tap is passed on to the page.
+        navigation.setOnItemReselectedListener(item -> {
+            if (tabTaps.onTap(item.getItemId(), SystemClock.uptimeMillis())) {
+                onTabDoubleTap(item.getItemId());
+            }
+        });
         selectTab(isTab(restored) ? restored : R.id.nav_home);
     }
 
@@ -53,6 +72,15 @@ public class MainActivity extends AppCompatActivity {
         if (!isTab(id)) { throw new IllegalArgumentException("Unknown top-level destination"); }
         if (navigation.getSelectedItemId() == id) { showTab(id); }
         else { navigation.setSelectedItemId(id); }
+        // Only the user's own taps make a double tap.
+        tabTaps.reset();
+    }
+
+    private void onTabDoubleTap(int id) {
+        Fragment page = getSupportFragmentManager().findFragmentByTag(tag(id));
+        if (page instanceof OnTabDoubleTapListener && page.isResumed()) {
+            ((OnTabDoubleTapListener) page).onTabDoubleTap();
+        }
     }
 
     private boolean showTab(int id) {
