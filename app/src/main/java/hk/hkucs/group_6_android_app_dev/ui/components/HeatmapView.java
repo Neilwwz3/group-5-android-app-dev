@@ -124,8 +124,7 @@ public class HeatmapView extends View {
         invalidate();
     }
 
-    /** For tests and screenshots: pretend today is {@code date}. */
-    @VisibleForTesting
+    /** Puts {@code date} in the last column, e.g. after midnight; tests can pretend too. */
     public void setToday(@NonNull Calendar date) {
         today = (Calendar) date.clone();
         invalidate();
@@ -255,6 +254,14 @@ public class HeatmapView extends View {
         day.add(Calendar.DAY_OF_MONTH, week * DAYS + weekday);
         String key = dayFormat.format(day.getTime());
         return key.compareTo(dayFormat.format(today.getTime())) > 0 ? null : key;
+    }
+
+    /** Sweeps the cells in from the left again, e.g. after the page was refreshed. */
+    public void replayReveal() {
+        if (!counts.isEmpty()) {
+            hasAnimated = true;
+            playReveal();
+        }
     }
 
     private void playReveal() {
