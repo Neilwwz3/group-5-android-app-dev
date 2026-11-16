@@ -45,10 +45,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -61,8 +59,8 @@ public class AddRecordActivity extends AppCompatActivity {
             "hk.hkucs.group_6_android_app_dev.extra.MEDIA_ID";
 
     private static final String DATE_PICKER_TAG = "watch_date_picker";
-    private static final int MIN_WATCH_YEAR = 1900;
-    private static final int MAX_WATCH_YEAR = 2100;
+    private static final int MIN_WATCH_YEAR = WatchDateInput.MIN_YEAR;
+    private static final int MAX_WATCH_YEAR = WatchDateInput.MAX_YEAR;
 
     private static final Pattern RATING_INPUT =
             Pattern.compile("(?:[0-9](?:\\.[0-9]?)?|10(?:\\.0?)?)?");
@@ -159,10 +157,10 @@ public class AddRecordActivity extends AppCompatActivity {
         });
 
         Calendar today = Calendar.getInstance();
-        dateInput.setText(formatDate(
+        dateInput.setText(formatWatchDate(WatchDateInput.utcMillis(
                 today.get(Calendar.YEAR),
                 today.get(Calendar.MONTH),
-                today.get(Calendar.DAY_OF_MONTH)));
+                today.get(Calendar.DAY_OF_MONTH))));
         MaterialDatePicker<?> restoredPicker = (MaterialDatePicker<?>)
                 getSupportFragmentManager().findFragmentByTag(DATE_PICKER_TAG);
         if (restoredPicker != null) {
@@ -216,9 +214,10 @@ public class AddRecordActivity extends AppCompatActivity {
                 dateInput.requestFocus();
                 return;
             }
-            String date = formatWatchDate(dateMillis);
-            dateInput.setText(date);
+            // Shown in English; saved as ISO like every other record.
+            dateInput.setText(formatWatchDate(dateMillis));
             dateInput.setError(null);
+            String date = WatchDateInput.iso(dateMillis);
 
             String minutesText = minutesInput.getText().toString().trim();
             Integer minutes = null;
@@ -538,40 +537,14 @@ public class AddRecordActivity extends AppCompatActivity {
     }
 
     private static String formatWatchDate(long dateMillis) {
-        Calendar calendar = utcCalendar();
-        calendar.setTimeInMillis(dateMillis);
-        return formatDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
+        return WatchDateInput.show(dateMillis);
     }
 
     private static Long parseWatchDate(String date) {
-        if (!date.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")) {
-            return null;
-        }
-
-        String[] parts = date.split("-");
-        int year = Integer.parseInt(parts[0]);
-        if (year < MIN_WATCH_YEAR || year > MAX_WATCH_YEAR) {
-            return null;
-        }
-
-        Calendar calendar = utcCalendar();
-        calendar.setLenient(false);
-        calendar.set(year, Integer.parseInt(parts[1]) - 1, Integer.parseInt(parts[2]));
-        try {
-            return calendar.getTimeInMillis();
-        } catch (IllegalArgumentException invalidDate) {
-            return null;
-        }
+        return WatchDateInput.parse(date);
     }
 
     private static Calendar utcCalendar() {
-        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"), Locale.US);
-        calendar.clear();
-        return calendar;
-    }
-
-    private static String formatDate(int year, int zeroBasedMonth, int day) {
-        return String.format(Locale.US, "%04d-%02d-%02d", year, zeroBasedMonth + 1, day);
+        return WatchDateInput.utcCalendar();
     }
 }
