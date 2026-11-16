@@ -78,6 +78,8 @@ public final class SampleDataLoader {
             item.status = status(o.optString("status"));
             item.rating = optFloat(o, "rating");
             item.source = "sample";
+            item.tmdbId = optString(o, "tmdbId");
+            item.imdbId = optString(o, "imdbId");
             // Keep the file's order as "most recently updated first".
             item.createdAt = now - i * 1000L;
             item.updatedAt = item.createdAt;

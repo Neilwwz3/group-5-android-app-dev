@@ -164,7 +164,8 @@ public class DataLayerTest {
 
     @Test
     public void sampleParser_readsTheD1Format() throws Exception {
-        String json = "{\"version\":1,\"items\":[{\"id\":\"interstellar-2014\",\"title\":\"Interstellar\","
+        String json = "{\"version\":1,\"source\":\"TMDB\",\"items\":[{\"id\":\"interstellar-2014\","
+                + "\"tmdbId\":\"157336\",\"imdbId\":\"tt0816692\",\"title\":\"Interstellar\","
                 + "\"year\":2014,\"type\":\"movie\",\"genres\":[\"Sci-Fi\",\"Drama\"],\"directors\":[],"
                 + "\"cast\":[],\"overview\":\"x\",\"runtimeMinutes\":169,\"totalEpisodes\":null,"
                 + "\"poster\":null,\"status\":\"watched\",\"rating\":9.5,\"tags\":[],\"records\":["
@@ -179,6 +180,9 @@ public class DataLayerTest {
         MediaItem movie = parsed.items.get(0);
         assertEquals(Float.valueOf(9.5f), movie.rating);
         assertNull(movie.poster);
+        assertEquals("157336", movie.tmdbId);
+        assertEquals("tt0816692", movie.imdbId);
+        assertNull(parsed.items.get(1).tmdbId);
         assertNull(movie.totalEpisodes);
         assertEquals(MediaStatus.WANT, parsed.items.get(1).status);
         assertEquals(Arrays.asList(1, 2), parsed.records.get(1).episodes);
