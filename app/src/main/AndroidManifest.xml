@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- G7: online title lookup on TMDB. Everything else stays local-first. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +16,7 @@
         android:theme="@style/Theme.Group6androidappdev">
         <activity android:name=".ui.detail.MediaDetailActivity" android:exported="false" />
         <activity android:name=".ui.edit.EditMediaActivity" android:exported="false" />
+        <activity android:name=".ui.search.TmdbSearchActivity" android:exported="false" />
         <activity android:name=".ui.record.AddRecordActivity" android:exported="false" />
         <activity
             android:name=".MainActivity"

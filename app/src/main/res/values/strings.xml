@@ -233,4 +233,19 @@
     <string name="g5_profile_share_column">Share</string>
     <string name="g5_profile_all_genres_title">All genres</string>
     <string name="g5_profile_close_genres">Close</string>
+    <!-- G7: online title lookup + manual poster -->
+    <string name="search_online">Search titles online (TMDB)</string>
+    <string name="field_poster">Poster</string>
+    <string name="choose_poster">Choose poster</string>
+    <string name="remove_poster">Remove poster</string>
+    <string name="poster_invalid">Could not read that image. Please choose another one.</string>
+    <string name="tmdb_search_title">Find a title on TMDB</string>
+    <string name="tmdb_search_hint">Enter a title, e.g. dune</string>
+    <string name="tmdb_search_action">Search</string>
+    <string name="tmdb_searching">Searching TMDB…</string>
+    <string name="tmdb_loading_details">Loading title details…</string>
+    <string name="tmdb_offline">Search needs a network connection. You can still fill in the details manually.</string>
+    <string name="tmdb_no_results">No matches on TMDB. Try a different title.</string>
+    <string name="already_in_library">This title is already in your library.</string>
+    <string name="tmdb_attribution">This product uses the TMDB API but is not endorsed or certified by TMDB.</string>
 </resources>
