@@ -25,6 +25,68 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/space_16">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/search_tmdb"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/touch_target"
+                android:text="@string/search_online"
+                android:visibility="gone" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16"
+                android:text="@string/field_poster"
+                android:textAppearance="@style/TextAppearance.Group6.Caption" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_8"
+                android:orientation="horizontal">
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="150dp">
+                    <TextView
+                        android:id="@+id/edit_poster"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/sample_poster_background"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:textAppearance="@style/TextAppearance.Group6.Title"
+                        android:textColor="@color/text_secondary" />
+                    <ImageView
+                        android:id="@+id/edit_poster_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+                </FrameLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/space_12"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/choose_poster"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/touch_target"
+                        android:text="@string/choose_poster" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/remove_poster"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/touch_target"
+                        android:text="@string/remove_poster" />
+                </LinearLayout>
+            </LinearLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_layout"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"

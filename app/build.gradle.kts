@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -16,6 +18,19 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // G7: TMDB key lives only in the gitignored local.properties. Builds without it
+        // (including CI) get an empty key and hide the online search entry.
+        val localProps = Properties().apply {
+            val file = rootProject.file("local.properties")
+            if (file.exists()) file.inputStream().use { load(it) }
+        }
+        val tmdbKey = localProps.getProperty("tmdbApiKey") ?: ""
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbKey\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
