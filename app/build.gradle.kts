@@ -19,13 +19,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // G7: TMDB key lives only in the gitignored local.properties. Builds without it
-        // (including CI) get an empty key and hide the online search entry.
+        // G7: TMDB key. local.properties (gitignored) wins if present. The fallback below
+        // is committed ONLY so any team machine can clone + Run with online search enabled
+        // for the Nov 18 presentation. TODO: remove the fallback after the demo (ask Neilwwz3).
         val localProps = Properties().apply {
             val file = rootProject.file("local.properties")
             if (file.exists()) file.inputStream().use { load(it) }
         }
-        val tmdbKey = localProps.getProperty("tmdbApiKey") ?: ""
+        val tmdbKey = localProps.getProperty("tmdbApiKey") ?: "1453dcbfca2c5b29667e6c75b9c934da"
         buildConfigField("String", "TMDB_API_KEY", "\"$tmdbKey\"")
     }
 
