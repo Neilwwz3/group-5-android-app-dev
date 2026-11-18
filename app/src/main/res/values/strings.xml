@@ -109,7 +109,7 @@
     <string name="diary_timeline">Your timeline</string>
     <string name="diary_timeline_body">Your entries will be grouped by date, with the latest first.</string>
     <string name="profile_title">Your Space</string>
-    <string name="profile_subtitle">A personal view of your movie life.</string>
+    <string name="profile_subtitle">Your viewing journey, at a glance.</string>
     <string name="profile_empty_title">Your story, in perspective</string>
     <string name="profile_empty_body">Your viewing journey starts with your first title. Come back to see how it grows.</string>
     <string name="profile_stats">Viewing overview</string>
