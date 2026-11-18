@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.os.SystemClock;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -97,16 +98,26 @@ public class DiaryScreenTest {
             onView(withId(R.id.nav_diary)).perform(click());
             waitForDiary();
             scenario.onActivity(activity -> {
+                diaryViewModel(activity).selectDate("2026-02-22");
                 RecyclerView list = activity.findViewById(R.id.diary_page);
                 list.scrollToPosition(list.getAdapter().getItemCount() - 1);
             });
             SystemClock.sleep(PAUSE_MS);
             onView(withId(R.id.nav_home)).perform(click());
             SystemClock.sleep(PAUSE_MS);
-            onView(withId(R.id.nav_diary)).perform(doubleClick());
+            // Not Espresso's doubleClick(): it waits for the 220 ms tab-switch animation
+            // between its taps, which can push them past the double-tap window. A finger
+            // does not wait, so tap twice in a row.
+            scenario.onActivity(activity -> {
+                View diaryTab = activity.findViewById(R.id.nav_diary);
+                diaryTab.performClick();
+                diaryTab.performClick();
+            });
             waitForDiary();
             onView(withId(R.id.diary_page)).check(matches(isDisplayed()));
             assertEquals(0, firstVisible(scenario));
+            scenario.onActivity(activity ->
+                    assertNull(diaryViewModel(activity).getSelectedDate().getValue()));
         }
     }
 
