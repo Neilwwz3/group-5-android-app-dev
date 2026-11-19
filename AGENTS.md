@@ -8,7 +8,7 @@
 
 ## 项目是什么
 
-- COMP7506 第 6 组的 Android 课程项目，暂定名 MovieTracker：本地优先的个人观影记录与评分 App。
+- COMP7506 第 5 组的 Android 课程项目，暂定名 MovieTracker：本地优先的个人观影记录与评分 App。
 - 核心需求还在调研，11 月 4 日确定。在此之前不要添加任务卡以外的功能。
 
 ## 技术栈（不许更换）
@@ -21,6 +21,8 @@
 ## 包结构
 
 基础包名：`hk.hkucs.group_6_android_app_dev`
+
+本组是第 5 组。包名里的 `group_6` 和主题、样式名里的 `Group6` 是建项目时留下的，不要改。
 
 ```
 ui/<功能名>/       Activity、Fragment、Adapter，以及这个功能自己的 ViewModel

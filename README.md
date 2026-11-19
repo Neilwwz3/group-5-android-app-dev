@@ -1,6 +1,8 @@
-# group-6-android-app-dev
+# group-5-android-app-dev
 
-COMP7506 智能手机应用开发，第 6 组课程项目（香港大学，2026）。
+COMP7506 智能手机应用开发，第 5 组课程项目（香港大学，2026）。
+
+> 包名 `hk.hkucs.group_6_android_app_dev`，以及主题和样式名里的 `Group6`，都是建项目时留下的。改包名会让已安装的 App 变成另一个 App，所以没有改。本组是第 5 组。
 
 **暂定名：** MovieTracker，一款本地优先的个人观影记录与评分 App。
 
@@ -41,7 +43,7 @@ COMP7506 智能手机应用开发，第 6 组课程项目（香港大学，2026�
 
 1. 克隆仓库：
    ```bash
-   git clone https://github.com/Neilwwz3/group-6-android-app-dev.git
+   git clone https://github.com/Neilwwz3/group-5-android-app-dev.git
    ```
 2. 用 Android Studio 打开这个文件夹（**File > Open**），等待 Gradle 同步完成。Android Studio 会自动生成记录 SDK 路径的 `local.properties`，不要提交它。
 3. 选择模拟器或真机，点 **Run**。
