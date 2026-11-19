@@ -17,7 +17,7 @@
 
 ### 1. 接受仓库邀请
 
-打开 GitHub 通知或注册邮箱里的邀请邮件，点 **Accept invitation**。找不到的话，打开 https://github.com/Neilwwz3/group-6-android-app-dev/invitations 。
+打开 GitHub 通知或注册邮箱里的邀请邮件，点 **Accept invitation**。找不到的话，打开 https://github.com/Neilwwz3/group-5-android-app-dev/invitations 。
 
 ### 2. 安装 Android Studio
 
@@ -28,7 +28,7 @@
 ### 3. 克隆项目
 
 1. 在 Android Studio 欢迎页点 **Clone Repository**。如果已经打开了别的项目，用 **File → New → Project from Version Control**。
-2. URL 填 `https://github.com/Neilwwz3/group-6-android-app-dev.git`。保存位置选一个**路径里没有中文和空格**的文件夹，点 **Clone**。
+2. URL 填 `https://github.com/Neilwwz3/group-5-android-app-dev.git`。保存位置选一个**路径里没有中文和空格**的文件夹，点 **Clone**。
 3. 弹窗要求登录 GitHub 时，按提示在浏览器里登录。
 4. 问是否信任项目时，选 **Trust Project**。
 
