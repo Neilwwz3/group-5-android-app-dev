@@ -33,7 +33,7 @@ import hk.hkucs.group_6_android_app_dev.data.model.RecordWithMedia;
 import hk.hkucs.group_6_android_app_dev.data.model.StatsSummary;
 
 /**
- * The only way pages read and write data. See docs/data-api.md.
+ * The only way pages read and write data. See the Data API section of the README.
  *
  * <p>{@code observe*} methods return LiveData that refreshes when the data changes. Writes run on
  * a single background thread in call order; their callbacks run on the main thread.

@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.Group6.Body"
-            android:text="@string/g5_profile_empty"
+            android:text="@string/profile_empty"
             android:layout_marginTop="@dimen/space_8"
             android:visibility="gone" />
 
@@ -90,7 +90,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_4"
                             android:gravity="center"
-                            android:text="@string/g5_profile_metric_titles"
+                            android:text="@string/profile_metric_titles"
                             android:textAppearance="@style/TextAppearance.Group6.Caption" />
                     </LinearLayout>
 
@@ -112,7 +112,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_4"
                             android:gravity="center"
-                            android:text="@string/g5_profile_metric_watched"
+                            android:text="@string/profile_metric_watched"
                             android:textAppearance="@style/TextAppearance.Group6.Caption" />
                     </LinearLayout>
                 </LinearLayout>
@@ -143,7 +143,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_4"
                             android:gravity="center"
-                            android:text="@string/g5_profile_metric_time"
+                            android:text="@string/profile_metric_time"
                             android:textAppearance="@style/TextAppearance.Group6.Caption" />
                     </LinearLayout>
 
@@ -165,7 +165,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_4"
                             android:gravity="center"
-                            android:text="@string/g5_profile_metric_average"
+                            android:text="@string/profile_metric_average"
                             android:textAppearance="@style/TextAppearance.Group6.Caption" />
                     </LinearLayout>
                 </LinearLayout>
@@ -461,7 +461,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_16"
             android:textAppearance="@style/TextAppearance.Group6.Title"
-            android:text="@string/g5_profile_genres" />
+            android:text="@string/profile_genres" />
 
         <com.google.android.material.card.MaterialCardView
             style="@style/Widget.Group6.Card"
@@ -541,7 +541,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:minHeight="@dimen/touch_target"
-                            android:text="@string/g5_profile_show_all_genres"
+                            android:text="@string/profile_show_all_genres"
                             android:textAllCaps="false"
                             android:visibility="gone" />
                     </LinearLayout>
@@ -553,7 +553,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.Group6.Body"
-                    android:text="@string/g5_profile_no_genres"
+                    android:text="@string/profile_no_genres"
                     android:visibility="gone" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -591,7 +591,7 @@
                     android:paddingTop="0dp"
                     android:paddingEnd="0dp"
                     android:paddingBottom="0dp"
-                    android:text="@string/g5_profile_load"
+                    android:text="@string/profile_load"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.Group6.Body"
                     android:textColor="@color/text_primary"
@@ -614,7 +614,7 @@
                     android:paddingTop="0dp"
                     android:paddingEnd="0dp"
                     android:paddingBottom="0dp"
-                    android:text="@string/g5_profile_clear"
+                    android:text="@string/profile_clear"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.Group6.Body"
                     android:textColor="@color/error"
@@ -624,7 +624,7 @@
                     android:id="@+id/profile_progress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/g5_profile_working"
+                    android:contentDescription="@string/profile_working"
                     android:indeterminate="true"
                     android:visibility="gone" />
             </LinearLayout>
@@ -644,7 +644,7 @@
                 android:minHeight="@dimen/touch_target"
                 android:paddingStart="@dimen/space_16"
                 android:paddingEnd="@dimen/space_16"
-                android:text="@string/g5_profile_about"
+                android:text="@string/profile_about"
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.Group6.Title" />
         </com.google.android.material.card.MaterialCardView>

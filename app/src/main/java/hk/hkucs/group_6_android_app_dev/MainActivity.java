@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private static String tag(int id) { return "g1_tab_" + id; }
+    private static String tag(int id) { return "tab_" + id; }
 
     @Override protected void onSaveInstanceState(@NonNull Bundle state) {
         state.putInt(STATE_TAB, selectedTab);

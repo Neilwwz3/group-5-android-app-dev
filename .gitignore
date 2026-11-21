@@ -32,3 +32,6 @@ keystore.properties
 *.log
 .DS_Store
 Thumbs.db
+
+# Local test artifacts (adb screenshots etc.)
+.screenshots/
