@@ -115,16 +115,10 @@
     <string name="profile_stats">Viewing overview</string>
     <string name="profile_stats_body">Your collection, viewing time and ratings will appear here.</string>
     <string name="profile_settings">Data management</string>
-    <string name="profile_settings_body">Sample data and collection controls are coming soon.</string>
     <string name="back">Back</string>
     <string name="details_title">Title details</string>
-    <string name="details_placeholder">Details will appear here when you open a title from your collection.</string>
     <string name="edit_title">Edit title</string>
-    <string name="add_placeholder">Adding titles is coming soon. For now, explore your library and the rest of MovieTracker.</string>
-    <string name="edit_placeholder">Title editing is coming soon.</string>
     <string name="record_title">Log a watch</string>
-    <string name="record_placeholder">Logging a viewing entry is coming soon.</string>
-    <string name="shell_notice">Preview · More to come</string>
     <string name="invalid_navigation_arguments">Unable to open this page. Please go back and try again.</string>
     <string name="record_back">Back</string>
     <string name="record_watch_date">Watch date</string>
