@@ -1,6 +1,6 @@
 # 数据接口约定
 
-页面怎么读写数据，以本文件为准。由数据层（ARCH-1）实现，实现前后方法名不变。
+页面怎么读写数据，以本文件为准。由数据层实现，实现前后方法名不变。
 
 **规则：** 页面只能通过自己的 ViewModel 调用 `MediaRepository`，不要直接使用 DAO 或数据库。缺数据、缺方法时，先和维护者沟通，不要自己加。
 
@@ -27,7 +27,7 @@ MediaRepository repo = MediaRepository.get(application);
 | `MediaType.SERIES` | `"series"` | TV Show |
 | `Genres.ALL` | Drama, Comedy, Action, Sci-Fi, Animation, Mystery, Crime, Romance, Horror, Documentary, Fantasy, War | 题材只能从这里选，数据里直接存这些英文词 |
 
-界面一律用英文。状态的显示文字已在 `strings.xml` 里（`status_want` 等，G1 提供）。
+界面一律用英文。状态的显示文字已在 `strings.xml` 里（`status_want` 等）。
 
 ## 数据类
 

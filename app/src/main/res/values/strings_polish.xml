@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- G6 demo polish. Kept in its own file so edits never conflict with strings.xml. -->
+<!-- UI polish strings. Kept in its own file so edits never conflict with strings.xml. -->
 <resources>
     <!-- Charts -->
     <string name="chart_hours_short">%1$dh</string>

@@ -20,7 +20,7 @@ team project, so the workflow below is what the team actually uses.
   git checkout -b feature/<area>-<short-name>    # e.g. feature/library-search
   ```
 - One change per PR. Keep PRs small and focused.
-- PR title: `<area>: <what changed>`, e.g. `G7: add offline search hint`.
+- PR title: `<area>: <what changed>`, e.g. `library: add offline search hint`.
 - A PR merges only when CI (the Gradle build workflow) is green **and** one teammate
   has approved it. The PR author performs the merge.
 

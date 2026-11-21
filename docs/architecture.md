@@ -37,7 +37,7 @@
 
 ### 表结构（v1 草案）
 
-字段参考 D-1 示例数据格式，保证示例数据能直接存进来。
+字段参考示例数据格式，保证示例数据能直接存进来。
 
 **`media_item`：一部电影或剧集**
 
@@ -103,7 +103,7 @@ data/repository/
 
 - `MainActivity` 放底部导航栏，4 个页签各是一个 Fragment，手动切换（UI 分支已实现，不使用 Navigation 组件）。
 - 二级页面（作品详情、添加 / 编辑作品、记一笔）用独立的 Activity：别人通过它们的 `newIntent(...)` 静态方法打开，返回键自然回到原页面。这样每个人的页面互不影响，也不需要共同维护导航图。
-- 所有 Activity 在 G1（骨架）里一次性注册进 `AndroidManifest.xml`，之后谁都不用再改它。
+- 所有 Activity 已在 `AndroidManifest.xml` 里一次性注册，之后谁都不用再改它。
 
 ```
 MainActivity（底部导航）

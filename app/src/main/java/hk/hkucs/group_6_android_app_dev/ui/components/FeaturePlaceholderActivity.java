@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.appbar.MaterialToolbar;
 import hk.hkucs.group_6_android_app_dev.R;
 
-/** Temporary G1 shell; feature owners replace this with their own content. */
+/** Temporary shell; feature owners replace this with their own content. */
 public abstract class FeaturePlaceholderActivity extends AppCompatActivity {
     protected abstract @StringRes int titleResource();
     protected abstract @StringRes int messageResource();

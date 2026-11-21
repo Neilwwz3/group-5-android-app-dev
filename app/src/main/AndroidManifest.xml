@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- G7: online title lookup on TMDB. Everything else stays local-first. -->
+    <!-- Online title lookup on TMDB. Everything else stays local-first. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application

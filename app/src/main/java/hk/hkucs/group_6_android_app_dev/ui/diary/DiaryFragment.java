@@ -18,7 +18,7 @@ import hk.hkucs.group_6_android_app_dev.data.model.RecordWithMedia;
 import hk.hkucs.group_6_android_app_dev.ui.detail.MediaDetailActivity;
 
 /**
- * G4 Diary tab: last year's heatmap above a timeline of watch records grouped by date.
+ * Diary tab: last year's heatmap above a timeline of watch records grouped by date.
  * Double-tapping the Diary tab jumps back to the top and reloads the page.
  */
 public class DiaryFragment extends Fragment implements MainActivity.OnTabDoubleTapListener {

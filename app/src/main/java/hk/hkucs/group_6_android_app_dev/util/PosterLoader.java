@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Loads posters from assets, local files (G7 manual/TMDB posters) or https URLs
+ * Loads posters from assets, local files (manual/TMDB posters) or https URLs
  * (search-result thumbnails) asynchronously with a small in-memory cache.
  */
 public final class PosterLoader {
@@ -91,7 +91,7 @@ public final class PosterLoader {
 
     /**
      * Resolves {@code file} against the three supported sources: https URL (search
-     * thumbnails), absolute local path (manual/TMDB posters saved by G7) or assets.
+     * thumbnails), absolute local path (manual/TMDB posters) or assets.
      */
     @Nullable
     private static Bitmap decodeSource(Context context, String file) {

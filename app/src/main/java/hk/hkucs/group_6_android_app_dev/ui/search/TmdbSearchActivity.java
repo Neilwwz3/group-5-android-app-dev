@@ -31,7 +31,7 @@ import hk.hkucs.group_6_android_app_dev.data.repository.MediaRepository;
 import hk.hkucs.group_6_android_app_dev.util.TmdbApi;
 
 /**
- * G7: look titles up on TMDB. Picking one returns the hit to the caller, which
+ * Look titles up on TMDB. Picking one returns the hit to the caller, which
  * fetches the full details. Titles already stored (matched by tmdbId, sample data
  * included) cannot be picked again, so one title can never be added twice.
  */

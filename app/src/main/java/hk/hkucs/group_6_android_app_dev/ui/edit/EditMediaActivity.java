@@ -51,7 +51,7 @@ import hk.hkucs.group_6_android_app_dev.util.MediaMeta;
 import hk.hkucs.group_6_android_app_dev.util.PosterLoader;
 import hk.hkucs.group_6_android_app_dev.util.TmdbApi;
 
-/** Add or edit one title. Entry contract from G1: {@link #newIntent(Context, String)}. */
+/** Add or edit one title. Entry contract: {@link #newIntent(Context, String)}. */
 public class EditMediaActivity extends AppCompatActivity {
 
     public static final String EXTRA_MEDIA_ID =
@@ -82,7 +82,7 @@ public class EditMediaActivity extends AppCompatActivity {
     private boolean populated;
     private boolean invalidNumber;
 
-    // G7: poster + online-lookup state that is not bound to a text field.
+    // Poster + online-lookup state that is not bound to a text field.
     private ImageView posterImage;
     private TextView posterFallback;
     /** null = unchanged; "" = cleared by the user; otherwise the new file path. */
@@ -184,7 +184,7 @@ public class EditMediaActivity extends AppCompatActivity {
             pendingPoster = "";
             showPoster(null, titleField.getText().toString());
         });
-        // G7: the online lookup entry only exists in builds that carry a TMDB key.
+        // The online lookup entry only exists in builds that carry a TMDB key.
         View searchEntry = findViewById(R.id.search_tmdb);
         searchEntry.setVisibility(TmdbApi.isEnabled() ? View.VISIBLE : View.GONE);
         searchEntry.setOnClickListener(v -> tmdbSearch.launch(TmdbSearchActivity.newIntent(this)));
@@ -257,7 +257,7 @@ public class EditMediaActivity extends AppCompatActivity {
                 ? "?" : title.substring(0, 1).toUpperCase());
     }
 
-    /** G7: copies the picked image into the app's private poster dir, downsampled. */
+    /** Copies the picked image into the app's private poster dir, downsampled. */
     private void importPoster(Uri uri) {
         posterIo.execute(() -> {
             String saved = null;
@@ -290,7 +290,7 @@ public class EditMediaActivity extends AppCompatActivity {
         });
     }
 
-    /** G7: after picking a search result, fetch full details and fill the form. */
+    /** After picking a search result, fetch full details and fill the form. */
     private void startLoadingDetails(Intent data) {
         String posterUrl = data.getStringExtra(TmdbSearchActivity.EXTRA_POSTER_URL);
         int year = data.getIntExtra(TmdbSearchActivity.EXTRA_YEAR, -1);
@@ -376,7 +376,7 @@ public class EditMediaActivity extends AppCompatActivity {
             item.tmdbId = loaded.tmdbId;
             item.imdbId = loaded.imdbId;
         }
-        // G7: a title picked from TMDB keeps its stable tmdb_ id so it can never
+        // A title picked from TMDB keeps its stable tmdb_ id so it can never
         // be stored twice (the search page blocks re-picking the same tmdbId).
         if (pendingTmdbId != null) {
             if (item.id.trim().isEmpty()) {
