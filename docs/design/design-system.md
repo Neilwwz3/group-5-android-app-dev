@@ -94,7 +94,7 @@ The interface uses system typography, English labels and no downloaded font. Lab
 
 ## Preview and scope
 
-Open `app/src/main/res/layout/design_sample.xml` in Android Studio Split or Design. The preview declares the application theme. It includes all five text levels, palette swatches, four badges, selected/unselected filter chips, a read-only rating, fictional media card and FAB.
+The preview screenshots below show all five text levels, palette swatches, four status badges, selected/unselected filter chips, a read-only rating, a fictional media card and a FAB.
 
 The reusable `Widget.Group6.BottomNavigation` style is implemented for real in the app shell (see the Architecture section of the README).
 
@@ -104,7 +104,7 @@ Android Studio preview screenshots and emulator screenshots must be captured fro
 
 ## Final component preview screenshots
 
-Component preview screenshots captured on November 5, 2026 (Asia/Hong_Kong). These show successive, overlapping sections of the scrollable `design_sample.xml` page. Original screenshot pixels are preserved. The current layout has since removed the “Read-only rating · Half-star steps” caption.
+Component preview screenshots captured on November 5, 2026 (Asia/Hong_Kong). These show successive, overlapping sections of the original scrollable component preview page. Original screenshot pixels are preserved. The “Read-only rating · Half-star steps” caption has since been dropped from the design.
 
 ### 1. Typography and brand colors
 

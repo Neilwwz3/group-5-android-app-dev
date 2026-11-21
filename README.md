@@ -202,7 +202,7 @@ MainActivity (bottom navigation)
 | Library | `LibraryFragment` | `fragment_library.xml`, `item_media.xml` | `LibraryViewModel` |
 | Diary | `DiaryFragment` | `fragment_diary.xml`, `item_diary_record.xml` | `DiaryViewModel` |
 | Profile | `ProfileFragment` | `fragment_profile.xml` | `ProfileViewModel` |
-| Detail | `MediaDetailActivity` | `activity_media_detail.xml`, `item_watch_record.xml` | `MediaDetailViewModel` |
+| Detail | `MediaDetailActivity` | `activity_media_detail.xml`, `item_record.xml` | `MediaDetailViewModel` |
 | Add / edit | `EditMediaActivity` | `activity_edit_media.xml` | `EditMediaViewModel` |
 | Log a watch | `AddRecordActivity` | `activity_add_record.xml` | `AddRecordViewModel` |
 | TMDB search | `TmdbSearchActivity` | `activity_tmdb_search.xml`, `item_tmdb_result.xml` | `TmdbSearchViewModel` |
