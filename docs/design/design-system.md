@@ -54,14 +54,13 @@ Use each `status_*_text` with its matching `status_*_bg`; status labels must rem
 | `corner_button` | `12dp` | Button shape corner radius; apply ShapeAppearance.Group6.Button explicitly |
 | `badge_horizontal_padding` | `12dp` | Start/end padding inside each status badge |
 | `badge_vertical_padding` | `6dp` | Top/bottom padding inside each status badge |
-| `poster_width` | `88dp` | Width of the compact sample media-card poster; adapt for other card formats |
-| `poster_height` | `132dp` | Height of the compact sample media-card poster; adapt for other card formats |
+| `poster_width` | `88dp` | Width of the compact media-card poster; adapt for other card formats |
+| `poster_height` | `132dp` | Height of the compact media-card poster; adapt for other card formats |
 | `touch_target` | `48dp` | Minimum interactive target |
-| `swatch_width` | `32dp` | Palette-preview swatch and sample poster-icon size |
 | `icon_size` | `24dp` | Navigation illustration icon size |
 | `card_outline_width` | `1dp` | Card outline thickness |
 
-Use 16dp screen padding and the 4/8/12/16/24dp spacing scale. These are the default conventions for new screens; the sample palette grid may use the same dimensions for compact preview arrangement. Keep repeated relationships consistent across pages rather than choosing a different gap for each item. Cards have 16dp corners, badges 8dp and buttons 12dp. Button shapes can use `ShapeAppearance.Group6.Button`. Use wrap-content for English labels and keep interactive touch targets at least 48dp.
+Use 16dp screen padding and the 4/8/12/16/24dp spacing scale. These are the default conventions for new screens; the palette grid may use the same dimensions for compact preview arrangement. Keep repeated relationships consistent across pages rather than choosing a different gap for each item. Cards have 16dp corners, badges 8dp and buttons 12dp. Button shapes can use `ShapeAppearance.Group6.Button`. Use wrap-content for English labels and keep interactive touch targets at least 48dp.
 
 ## Styles
 
@@ -140,7 +139,7 @@ Apply text styles through `android:textAppearance`; apply widget styles through 
 <com.google.android.material.chip.Chip
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/sample_movie"
+    android:text="@string/home_type_movie"
     android:checked="true"
     style="@style/Widget.Group6.FilterChip" />
 ```
@@ -150,6 +149,7 @@ Apply text styles through `android:textAppearance`; apply widget styles through 
 ```xml
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.Group6.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -157,8 +157,8 @@ Apply text styles through `android:textAppearance`; apply widget styles through 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/space_16"
-        android:text="@string/sample_film"
-        android:textAppearance="@style/TextAppearance.Group6.CardTitle" />
+        android:textAppearance="@style/TextAppearance.Group6.CardTitle"
+        tools:text="The Last Lighthouse" />
 </com.google.android.material.card.MaterialCardView>
 ```
 
@@ -171,7 +171,7 @@ Apply text styles through `android:textAppearance`; apply widget styles through 
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:rating="4"
-    android:contentDescription="@string/sample_rating_description" />
+    android:contentDescription="@string/record_rating_label" />
 ```
 
 This fixed sample represents 8/10. Production code supplies the actual score divided by two and a matching localized content description. Keep rating editing in the later feature work.
