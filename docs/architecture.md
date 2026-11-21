@@ -25,13 +25,13 @@
 
 **注意：** 固定用 Room **2.x**。Room 3 面向 Kotlin / KSP，不适合本项目。
 
-### 要加的依赖（统筹负责加）
+### 要加的依赖（由维护者负责添加）
 
 | 库 | 用途 | 版本 |
 | --- | --- | --- |
 | `androidx.room:room-runtime` + `room-compiler`（annotationProcessor） | 数据库 | 2.8.5 |
 | `androidx.lifecycle:lifecycle-viewmodel` / `lifecycle-livedata` | MVVM | 2.11.0 |
-| `androidx.fragment:fragment` | 页签页面（李同学的 UI 分支已加） | 1.9.1 |
+| `androidx.fragment:fragment` | 页签页面（UI 分支已加） | 1.9.1 |
 
 统计图表**不引入图表库**：评分控件、热力图、环形图都是自绘 View。
 
@@ -88,20 +88,20 @@ data/repository/
   SettingsRepository.java   包装 SharedPreferences
 ```
 
-规则（和 `AGENTS.md` 一致）：
+规则（和 `CONTRIBUTING.md` 一致）：
 
-- `data/db/` 只有统筹能改。需要新字段、新查询，先找统筹。
+- `data/db/` 只有维护者能改。需要新字段、新查询，先找维护者。
 - Fragment 不直接碰 DAO，一律 ViewModel → Repository。
 - 写数据库统一用 Repository 里的后台线程池，不许 `allowMainThreadQueries()`。
 - 演示前改表结构时，开发阶段允许清空重建（`fallbackToDestructiveMigration`），因为示例数据可以一键重新载入；正式提交前再评估是否需要写 Migration。
 
 ## 2. 页面划分
 
-> 11 月 5 日更新：采用李同学 `UI` 分支里已经做好的四个页签，把“观影计划”换成主题包 A 的“日记”，统计和设置并入“我的”。
+> 更新：采用 UI 分支里已经做好的四个页签，把“观影计划”换成主题包 A 的“日记”，统计和设置并入“我的”。
 
 ### 整体结构
 
-- `MainActivity` 放底部导航栏，4 个页签各是一个 Fragment，手动切换（李同学的 `UI` 分支已实现，不使用 Navigation 组件）。
+- `MainActivity` 放底部导航栏，4 个页签各是一个 Fragment，手动切换（UI 分支已实现，不使用 Navigation 组件）。
 - 二级页面（作品详情、添加 / 编辑作品、记一笔）用独立的 Activity：别人通过它们的 `newIntent(...)` 静态方法打开，返回键自然回到原页面。这样每个人的页面互不影响，也不需要共同维护导航图。
 - 所有 Activity 在 G1（骨架）里一次性注册进 `AndroidManifest.xml`，之后谁都不用再改它。
 
@@ -172,6 +172,6 @@ MainActivity（底部导航）
 
 页面读写数据的方法见 [`docs/data-api.md`](data-api.md)。
 
-## 3. 实施顺序与分工
+## 3. 范围说明
 
-见 [`docs/tasks/README.md`](tasks/README.md) 的第二波交付目标。好友功能和 Jellyfin 导入已在 11 月 2 日决定不做。
+好友功能和 Jellyfin 导入经调研后决定不做。

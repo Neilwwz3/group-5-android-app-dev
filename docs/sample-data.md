@@ -1,9 +1,9 @@
 # Sample Media Data
 
 File: `app/src/main/assets/sample/library.json` (`version: 1`).
-This dataset is used for class demos, the intro video, and development testing. It simulates one year (2025-12 to 2026-11) of viewing history for a single user. Titles, credits, runtimes and episode counts were checked against TMDB on 2026-11-13, and every `poster` under `app/src/main/assets/sample/posters/` is the title's official TMDB poster (not a self-made placeholder). The overviews are still our own words for now. From the 2026-11-15 update of task card D-1, all title details, overviews and posters are generated in one run from TMDB by `tools/sample-data/pull.py`; viewing history stays hand-written. TMDB is credited in the app's About dialog, as its terms require.
+This dataset is used for class demos, the intro video, and development testing. It simulates one year (2025-12 to 2026-11) of viewing history for a single user. Titles, credits, runtimes and episode counts were checked against TMDB on 2026-11-13, and every `poster` under `app/src/main/assets/sample/posters/` is the title's official TMDB poster (not a self-made placeholder). The overviews are still our own words for now. Since the 2026-11-15 update, all title details, overviews and posters are generated in one run from TMDB by a local pull script (kept out of the repository because it uses a personal TMDB key); viewing history stays hand-written. TMDB is credited in the app's About dialog, as its terms require.
 
-The entire dataset is in English, as required by the project's English-only UI rule (see `AGENTS.md`).
+The entire dataset is in English, as required by the project's English-only UI rule (see `CONTRIBUTING.md`).
 
 ## Totals
 
