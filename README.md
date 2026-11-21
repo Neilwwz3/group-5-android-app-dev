@@ -2,6 +2,8 @@
 
 A local-first personal movie & TV tracking app for Android, built as the COMP7506 (Smartphone App Development) group project at The University of Hong Kong, 2026.
 
+> The package name `hk.hkucs.group_6_android_app_dev` and the `Group6` prefix in theme and style names date from project creation. Renaming the package would make the installed app appear as a different app, so they were left unchanged. This is Group 5.
+
 Track what you want to watch, are watching, and have watched; rate titles from 0 to 10; log each viewing session with duration and a short review; and browse your whole year in a diary-style heatmap. All data lives on your device — no account, no server.
 
 ![App screenshot](docs/design/app-running.png)

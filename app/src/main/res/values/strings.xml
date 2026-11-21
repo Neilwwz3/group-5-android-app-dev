@@ -56,7 +56,7 @@
     <string name="diary_timeline">Your timeline</string>
     <string name="diary_timeline_body">Your entries will be grouped by date, with the latest first.</string>
     <string name="profile_title">Your Space</string>
-    <string name="profile_subtitle">A personal view of your movie life.</string>
+    <string name="profile_subtitle">Your viewing journey, at a glance.</string>
     <string name="profile_empty_title">Your story, in perspective</string>
     <string name="profile_empty_body">Your viewing journey starts with your first title. Come back to see how it grows.</string>
     <string name="profile_stats">Viewing overview</string>
@@ -150,7 +150,7 @@
     <string name="profile_working">Updating your collection</string>
     <string name="profile_cancel">Cancel</string>
     <string name="profile_about">About</string>
-    <string name="profile_about_message">COMP7506 Group 6\n\nTitle details, overviews and posters in the sample library come from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</string>
+    <string name="profile_about_message">COMP7506 Group 5\n\nTitle details, overviews and posters in the sample library come from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</string>
     <string name="profile_ok">OK</string>
     <string name="profile_metric_titles">Total titles</string>
     <string name="profile_metric_watched">Watched</string>
@@ -167,8 +167,6 @@
     <string name="profile_show_all_genres">Show all genres</string>
     <string name="profile_show_fewer_genres">Show fewer genres</string>
     <string name="profile_genre_share_note">Percentages are based on genre occurrences. A title can count toward more than one genre.</string>
-    <string name="profile_overview_prompt">Every watch adds up.</string>
-    <string name="profile_genres_prompt">Which genre steals the show?</string>
     <string name="profile_genre_column">Genre</string>
     <string name="profile_titles_column">Titles</string>
     <string name="profile_share_column">Share</string>

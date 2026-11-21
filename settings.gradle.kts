@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "group-6-android-app-dev"
+rootProject.name = "group-5-android-app-dev"
 include(":app")
  

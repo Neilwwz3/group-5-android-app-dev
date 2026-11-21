@@ -17,8 +17,25 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/home_eyebrow"
+            android:textAppearance="@style/TextAppearance.Group6.Caption"
+            android:textColor="@color/primary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_8"
+            android:accessibilityHeading="true"
             android:textAppearance="@style/TextAppearance.Group6.Headline"
             android:text="@string/profile_title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_8"
+            android:text="@string/profile_subtitle"
+            android:textAppearance="@style/TextAppearance.Group6.Body"
+            android:textColor="@color/text_secondary" />
 
         <TextView
             android:id="@+id/profile_empty"
@@ -35,13 +52,6 @@
             android:layout_marginTop="@dimen/space_16"
             android:textAppearance="@style/TextAppearance.Group6.Title"
             android:text="@string/profile_stats" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_4"
-            android:text="@string/profile_overview_prompt"
-            android:textAppearance="@style/TextAppearance.Group6.Caption" />
 
         <com.google.android.material.card.MaterialCardView
             style="@style/Widget.Group6.Card"
@@ -170,13 +180,6 @@
             android:text="@string/profile_monthly_title"
             android:textAppearance="@style/TextAppearance.Group6.Title" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_4"
-            android:text="@string/profile_monthly_prompt"
-            android:textAppearance="@style/TextAppearance.Group6.Caption" />
-
         <com.google.android.material.card.MaterialCardView
             style="@style/Widget.Group6.Card"
             android:layout_width="match_parent"
@@ -232,13 +235,6 @@
                 android:accessibilityHeading="true"
                 android:text="@string/profile_highlights_title"
                 android:textAppearance="@style/TextAppearance.Group6.Title" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_4"
-                android:text="@string/profile_highlights_prompt"
-                android:textAppearance="@style/TextAppearance.Group6.Caption" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -466,13 +462,6 @@
             android:layout_marginTop="@dimen/space_16"
             android:textAppearance="@style/TextAppearance.Group6.Title"
             android:text="@string/profile_genres" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_4"
-            android:text="@string/profile_genres_prompt"
-            android:textAppearance="@style/TextAppearance.Group6.Caption" />
 
         <com.google.android.material.card.MaterialCardView
             style="@style/Widget.Group6.Card"
