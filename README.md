@@ -21,8 +21,8 @@ Track what you want to watch, are watching, and have watched; rate titles from 0
 | --- | --- |
 | Language | Java 11 (no Kotlin sources) |
 | UI | XML layouts, Material Components (Material 3), AppCompat, ConstraintLayout |
-| Architecture | MVVM with ViewModel + LiveData; single Repository as the data entry point |
-| Storage | Room (SQLite), local-only |
+| Architecture | MVVM with ViewModel + LiveData; a single Repository as the data entry point |
+| Storage | Room (SQLite), local-only; `SharedPreferences` for settings |
 | Build | Gradle wrapper (Kotlin DSL), Android Gradle Plugin; versions catalogued in [`gradle/libs.versions.toml`](gradle/libs.versions.toml) |
 | SDK | minSdk 24 · targetSdk 37 · compileSdk 37 |
 
@@ -65,13 +65,295 @@ The app builds and runs without a key — the "Search titles online (TMDB)" entr
    ```
 3. Sync Gradle and run. The key is injected into `BuildConfig` at build time and is never stored in the repository.
 
-## Architecture & documentation
+## Architecture
 
-- [`docs/architecture.md`](docs/architecture.md) — module layout, data flow, navigation.
-- [`docs/data-api.md`](docs/data-api.md) — the Repository API used by all UI layers.
-- [`docs/design/design-system.md`](docs/design/design-system.md) — colors, typography, spacing.
+### Storage: Room
+
+| Data | Where it lives |
+| --- | --- |
+| Titles and viewing records | **Room** (androidx.room 2.8.x, on SQLite) |
+| Settings (e.g. whether sample data was loaded) | `SharedPreferences` |
+| Poster images | Files in the app's private directory; only the file name is stored in the database |
+
+Room was chosen because it is an official Jetpack component (not a third-party library), works offline, validates SQL at compile time, returns `LiveData` from DAOs so the UI refreshes automatically, and supports Java through `annotationProcessor`. Hand-written `SQLiteOpenHelper`, Realm / ObjectBox and DataStore were rejected for boilerplate, unnecessary dependency, and Kotlin-coroutine orientation respectively. Room stays on **2.x**; Room 3 targets Kotlin/KSP.
+
+Key dependencies: `androidx.room:room-runtime` + `room-compiler` (2.8.5), `lifecycle-viewmodel` / `lifecycle-livedata` (2.11.0), `androidx.fragment:fragment` (1.9.1). Charts are **not** drawn with a chart library — the rating widget, heatmap, donut chart and bar chart are custom views.
+
+#### Schema
+
+**`media_item` — one movie or show**
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | TEXT primary key | `<slug>-<year>` for sample data, UUID for manual entries, `tmdb_<id>` for TMDB imports |
+| `title` / `original_title` | TEXT | Display title / original title |
+| `year` | INTEGER | Release year, nullable |
+| `type` | TEXT | `movie` / `series` |
+| `genres` / `directors` / `cast` / `tags` | TEXT | String lists stored as one column via a TypeConverter |
+| `overview` | TEXT | Synopsis |
+| `runtime_minutes` | INTEGER | Movie runtime / episode runtime |
+| `total_episodes` | INTEGER | Total episodes for series; null for movies |
+| `poster` | TEXT | Poster file name, nullable |
+| `status` | TEXT | `want` / `watching` / `watched` / `dropped` |
+| `rating` | REAL | Current rating 0–10, nullable |
+| `source` | TEXT | `manual` / `sample` / `tmdb` |
+| `tmdb_id` / `imdb_id` | TEXT | External ids, nullable; used for de-duplication |
+| `created_at` / `updated_at` | INTEGER | Millisecond timestamps |
+
+**`watch_record` — one viewing session**
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | INTEGER autoincrement | |
+| `media_id` | TEXT | Foreign key → `media_item.id`; cascades on delete; indexed |
+| `date` | TEXT | `YYYY-MM-DD`, convenient for month grouping |
+| `episodes` | TEXT | Episodes watched in this session (integer list); empty for movies |
+| `minutes` | INTEGER | Minutes watched |
+| `rating` | REAL | Rating for this session, nullable |
+| `note` | TEXT | One-line review |
+| `created_at` | INTEGER | Millisecond timestamp |
+
+List fields are deliberately not normalised into separate tables: the dataset is a few hundred rows at most, so genre aggregation is done in Java and fewer tables mean fewer mistakes.
+
+#### Code layout
+
+```
+data/db/
+  AppDatabase.java          singleton, version = 1, exportSchema = true
+  Converters.java           List<String> / List<Integer> ↔ TEXT
+  entity/MediaItem.java
+  entity/WatchRecord.java
+  dao/MediaDao.java         CRUD, queries by status/type, title search, returns LiveData
+  dao/WatchRecordDao.java   records per title, per period, monthly totals
+data/repository/
+  MediaRepository.java      the only data entry point for the UI; writes on a background thread
+  SettingsRepository.java   wraps SharedPreferences
+```
+
+Rules:
+
+- Only maintainers change `data/db/`. New fields or queries go through them.
+- Fragments never touch DAOs directly — always ViewModel → Repository.
+- All database writes use the Repository's background executor; `allowMainThreadQueries()` is not allowed.
+- `fallbackToDestructiveMigration` is acceptable during development because sample data can be reloaded in one tap; revisit before a formal release.
+
+### Screens
+
+The app has four bottom-navigation tabs, each a Fragment switched manually by `MainActivity` (no Navigation component). Secondary screens are separate Activities opened through static `newIntent(...)` factories, so Back naturally returns to the originating tab and every screen owns its own code. All Activities are registered once in `AndroidManifest.xml`.
+
+```
+MainActivity (bottom navigation)
+├── Home     HomeFragment     ──→ Title detail
+├── Library  LibraryFragment  ──→ Title detail ──→ Add / edit title
+│                                              └──→ Log a watch
+├── Diary    DiaryFragment    ──→ Title detail
+└── Profile  ProfileFragment (stats + settings)
+```
+
+#### Home `ui/home/`
+
+- Continue watching: titles with status "watching", horizontal cards
+- Recent entries: the last five viewing records
+- Monthly overview: entries and hours this month
+- Empty state pointing to Profile to load sample data
+
+#### Library `ui/library/`
+
+- Search field (title / original title)
+- Filter: All / Want to Watch / Watching / Watched / Dropped
+- Cards: poster, title, "year · type · genres", star rating, status badge
+- Floating action button: add a title
+- Tapping a card opens the detail screen
+
+#### Diary `ui/diary/`
+
+- Top: a one-year viewing heatmap, one cell per day, darker = more records; tapping a cell jumps the timeline to that day
+- Bottom: a timeline of records grouped by date, newest first
+
+#### Profile `ui/profile/`
+
+- Stats: totals (titles, watched, total time, average rating) and a genre donut chart
+- Settings: load sample data, clear all data (both confirmed), About
+- Monthly bar chart
+
+### Secondary screens
+
+| Screen | Package | Purpose |
+| --- | --- | --- |
+| Title detail | `ui/detail/` | Info, status switch, rating, viewing records, edit, delete, log a watch |
+| Add / edit title | `ui/edit/` | One screen: no id means add, an id means edit |
+| Log a watch | `ui/record/` | Date, duration, session rating, short review; saves and returns |
+| TMDB search | `ui/search/` | Online lookup; returns the picked hit to the Add/Edit form |
+
+### Shared components `ui/components/`
+
+| Component | Used by |
+| --- | --- |
+| `RatingView`: 0–10 rating, five stars, half-star steps, read-only mode | Detail, log a watch, library cards |
+| `HeatmapView`: one-year viewing heatmap | Diary |
+| `DonutChartView`: genre donut | Profile |
+| `MonthlyBarChartView`: monthly totals | Profile |
+
+### File naming
+
+| Screen | Class | Layout | ViewModel |
+| --- | --- | --- | --- |
+| Home | `HomeFragment` | `fragment_home.xml` | `HomeViewModel` |
+| Library | `LibraryFragment` | `fragment_library.xml`, `item_media.xml` | `LibraryViewModel` |
+| Diary | `DiaryFragment` | `fragment_diary.xml`, `item_diary_record.xml` | `DiaryViewModel` |
+| Profile | `ProfileFragment` | `fragment_profile.xml` | `ProfileViewModel` |
+| Detail | `MediaDetailActivity` | `activity_media_detail.xml`, `item_watch_record.xml` | `MediaDetailViewModel` |
+| Add / edit | `EditMediaActivity` | `activity_edit_media.xml` | `EditMediaViewModel` |
+| Log a watch | `AddRecordActivity` | `activity_add_record.xml` | `AddRecordViewModel` |
+| TMDB search | `TmdbSearchActivity` | `activity_tmdb_search.xml`, `item_tmdb_result.xml` | `TmdbSearchViewModel` |
+
+Out of scope by decision: a friends/social feature and Jellyfin import.
+
+## Data API
+
+Screens read and write data only through `MediaRepository`. The exact method names below are the contract between the UI and the data layer.
+
+ViewModels extend `AndroidViewModel` and obtain the repository in their constructor:
+
+```java
+MediaRepository repo = MediaRepository.get(application);
+```
+
+- Methods starting with `observe` return `LiveData`; the UI refreshes automatically when data changes.
+- Writes run on a background thread and return immediately. Pass a callback if you need completion; callbacks run on the main thread and may update the UI directly.
+
+### Constants
+
+| Class | Value | Displayed as |
+| --- | --- | --- |
+| `MediaStatus.WANT` | `"want"` | Want to Watch |
+| `MediaStatus.WATCHING` | `"watching"` | Watching |
+| `MediaStatus.WATCHED` | `"watched"` | Watched |
+| `MediaStatus.DROPPED` | `"dropped"` | Dropped |
+| `MediaType.MOVIE` | `"movie"` | Movie |
+| `MediaType.SERIES` | `"series"` | TV Show |
+| `Genres.ALL` | Drama, Comedy, Action, Sci-Fi, Animation, Mystery, Crime, Romance, Horror, Documentary, Fantasy, War | Genres may only be chosen from this list and are stored as these English words |
+
+All UI text is English and lives in `strings.xml` (for example `status_want`).
+
+### Data classes
+
+**`MediaItem`**
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `id` | `String` | Leave empty on insert; generated on save |
+| `title` / `originalTitle` | `String` | Title required (English display name) / original title nullable |
+| `year` | `Integer` | Nullable |
+| `type` | `String` | One of `MediaType` |
+| `genres` / `directors` / `cast` / `tags` | `List<String>` | Never null; empty list when absent |
+| `overview` | `String` | Synopsis |
+| `runtimeMinutes` | `Integer` | Movie or episode runtime, nullable |
+| `totalEpisodes` | `Integer` | Null for movies |
+| `poster` | `String` | Poster file name, nullable; the UI shows a placeholder when empty |
+| `status` | `String` | One of `MediaStatus` |
+| `rating` | `Float` | 0–10 in steps of 1 (half a star); null means not rated |
+
+**`WatchRecord`**
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `id` | `long` | Generated |
+| `mediaId` | `String` | Owning title |
+| `date` | `String` | `YYYY-MM-DD` |
+| `episodes` | `List<Integer>` | Episodes watched in this session; empty list for movies |
+| `minutes` | `Integer` | Minutes watched, nullable |
+| `rating` | `Float` | Session rating, nullable |
+| `note` | `String` | One-line review, may be an empty string |
+
+**`RecordWithMedia`** — a record plus its title's `mediaTitle`, `mediaPoster` and `mediaType`.
+**`StatsSummary`** — `mediaCount`, `watchedCount`, `totalMinutes`, `averageRating` (nullable `Float`), `recordCount`.
+**`GenreCount`** — `genre`, `count`.
+
+### MediaRepository methods
+
+**Titles**
+
+| Method | Returns | Used by |
+| --- | --- | --- |
+| `observeAllMedia()` | `LiveData<List<MediaItem>>`, most recently updated first | Library (search, filters and sorting happen in the ViewModel) |
+| `observeMedia(String id)` | `LiveData<MediaItem>`; becomes null after deletion | Detail, add/edit, log a watch |
+| `observeMediaByStatus(String status)` | `LiveData<List<MediaItem>>` | Home — continue watching |
+| `saveMedia(MediaItem item, Consumer<String> onSaved)` | Inserts or updates; the callback receives the id and may be null | Add / edit |
+| `updateStatus(String id, String status)` | — | Detail |
+| `updateRating(String id, Float rating)` | —; rating may be null | Detail |
+| `deleteMedia(String id, Runnable onDone)` | Deletes the title together with its records | Detail |
+
+**Viewing records**
+
+| Method | Returns | Used by |
+| --- | --- | --- |
+| `observeRecords(String mediaId)` | `LiveData<List<WatchRecord>>`, newest first | Detail |
+| `observeRecentRecords(int limit)` | `LiveData<List<RecordWithMedia>>` | Home — recent entries |
+| `observeTimeline()` | `LiveData<List<RecordWithMedia>>`, all records, newest first | Diary timeline |
+| `observeDailyCounts(String fromDate, String toDate)` | `LiveData<Map<String, Integer>>`: date → record count; days without records are absent | Diary heatmap |
+| `addRecord(WatchRecord record, Runnable onDone)` | Saves a record. If the title was "want": movies become "watched" and series become "watching". If the title has no rating and this record has one, the title takes the record's rating | Log a watch |
+| `deleteRecord(long recordId, Runnable onDone)` | Deletes a record; title status is unchanged | Detail |
+| `restoreRecord(WatchRecord record, Runnable onDone)` | Undo delete: re-inserts the record under its original id without changing title status | Detail |
+
+**Statistics**
+
+| Method | Returns | Used by |
+| --- | --- | --- |
+| `observeSummary()` | `LiveData<StatsSummary>` over all data | Profile |
+| `observeMonthSummary(String yearMonth)` | `LiveData<StatsSummary>` for e.g. `"2026-11"` | Home — monthly overview |
+| `observeGenreCounts()` | `LiveData<List<GenreCount>>`, largest first | Profile — genre donut |
+| `observeMonthlyTotals(String fromDate)` | `LiveData<List<MonthTotal>>`: per-month `count` and `minutes`, `month` like `"2026-11"`, oldest first | Profile — monthly bars |
+
+**Sample data**
+
+| Method | Effect |
+| --- | --- |
+| `SampleDataLoader.load(Context context, Runnable onDone)` | Clears existing data, then loads `assets/sample/library.json`, including `tmdbId` / `imdbId` |
+| `SampleDataLoader.load(Context context, Runnable onDone, Consumer<Exception> onError)` | Same, but calls `onError` (leaving data untouched) when the file is missing or malformed; the settings screen should use this version |
+| `MediaRepository.get(context).clearAll(Runnable onDone)` | Clears all titles and records |
+
+## Sample data
+
+File: `app/src/main/assets/sample/library.json` (`version: 1`). The dataset simulates one year (2025-12 to 2026-11) of viewing history for a single user and is used for demos and manual testing. Titles, credits, runtimes and episode counts were checked against TMDB on 2026-11-13, and every `poster` under `app/src/main/assets/sample/posters/` is the title's official TMDB poster. Title details, overviews and posters are generated in one run by a local pull script kept out of the repository (it uses a personal TMDB key); the viewing history is hand-written. TMDB is credited in the app's About dialog, as its terms require.
+
+### Totals
+
+| Category | Count |
+| --- | --- |
+| Movies | 20 |
+| Series | 10 |
+| Total | 30 |
+
+### Status distribution
+
+| Status | Count |
+| --- | --- |
+| watched | 14 |
+| want | 8 |
+| watching | 5 |
+| dropped | 3 |
+
+### Coverage
+
+10 genres are used: Drama, Sci-Fi, Action, Mystery, Crime, Romance, Animation, Comedy, Fantasy, War.
+
+- 3 titles rated 9.5 or above: The Shawshank Redemption 9.7, Farewell My Concubine 9.6, Interstellar 9.5.
+- 3 titles below 5: Avengers: Endgame 4.0, Ready Player One 4.5, The Big Bang Theory 4.5 (all dropped).
+- Most ratings fall in the 6–9 range; the 8 "want" titles are unscored.
+
+### Viewing records
+
+- Dates span **2025-12 to 2026-11**, with at least one record in each month.
+- 63 records in total: 2025-12(1), 2026-01(11), 2026-02(6), 2026-03(4), 2026-04(5), 2026-05(7), 2026-06(4), 2026-07(3), 2026-08(4), 2026-09(5), 2026-10(2), 2026-11(11).
+- **Multi-record days** make the heatmap show every shade: 2026-02-22 has 4 records (darkest), 2026-01-11 and 2026-11-07 have 3, and 2026-01-10, 2026-05-28, 2026-09-25 and 2026-11-08 have 2.
+- **Streak**: 2026-01-05 to 2026-01-12 — 8 consecutive days (bingeing Game of Thrones).
+- **Rewatches with changed ratings**: 18 titles have two or more records with different ratings (e.g. Interstellar 9.0 → 9.5, Inception 8.5 → 9.0, Parasite 8.5 → 8.8, Spirited Away 8.8 → 9.0, The Shawshank Redemption 9.5 → 9.7).
+
+## Further documentation
+
+- [`docs/design/design-system.md`](docs/design/design-system.md) — colors, typography, spacing, component previews.
 - [`docs/research/competitors.md`](docs/research/competitors.md) — competitor analysis (Letterboxd, IMDb, Douban).
-- [`docs/sample-data.md`](docs/sample-data.md) — how the bundled sample dataset was generated.
 
 All user-facing text in the app is English; strings live in `res/values/strings.xml`.
 

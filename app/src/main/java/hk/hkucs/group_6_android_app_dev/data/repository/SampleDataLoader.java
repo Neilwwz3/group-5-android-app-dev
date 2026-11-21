@@ -24,7 +24,7 @@ import hk.hkucs.group_6_android_app_dev.data.model.MediaStatus;
 import hk.hkucs.group_6_android_app_dev.data.model.MediaType;
 
 /**
- * Loads the demo library from {@code assets/sample/library.json} (format: docs/sample-data.md).
+ * Loads the demo library from {@code assets/sample/library.json} (see the README's Sample data section).
  * Loading replaces all existing data.
  */
 public final class SampleDataLoader {

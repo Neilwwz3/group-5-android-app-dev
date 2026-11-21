@@ -95,20 +95,20 @@ public class ProfileFragment extends Fragment {
         });
         model.getLoadFailed().observe(getViewLifecycleOwner(), failed -> {
             if (Boolean.TRUE.equals(failed)) {
-                Toast.makeText(requireContext(), R.string.g5_profile_load_error, Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), R.string.profile_load_error, Toast.LENGTH_LONG).show();
                 model.acknowledgeLoadFailure();
             }
         });
 
-        load.setOnClickListener(button -> confirm(R.string.g5_profile_load, R.string.g5_profile_load_message,
+        load.setOnClickListener(button -> confirm(R.string.profile_load, R.string.profile_load_message,
                 model::loadSampleData));
-        clear.setOnClickListener(button -> confirm(R.string.g5_profile_clear, R.string.g5_profile_clear_message,
+        clear.setOnClickListener(button -> confirm(R.string.profile_clear, R.string.profile_clear_message,
                 model::clearAllData));
         view.findViewById(R.id.profile_about).setOnClickListener(button ->
                 dialog = new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.app_name)
-                        .setMessage(R.string.g5_profile_about_message)
-                        .setPositiveButton(R.string.g5_profile_ok, null)
+                        .setMessage(R.string.profile_about_message)
+                        .setPositiveButton(R.string.profile_ok, null)
                         .show());
     }
 
@@ -123,17 +123,17 @@ public class ProfileFragment extends Fragment {
         countUp(view.findViewById(R.id.profile_watched), shownWatched, summary.watchedCount,
                 integerFormat::format);
         countUp(view.findViewById(R.id.profile_time), shownMinutes, summary.totalMinutes,
-                value -> getString(R.string.g5_profile_metric_minutes, integerFormat.format(value)));
+                value -> getString(R.string.profile_metric_minutes, integerFormat.format(value)));
         shownTitles = summary.mediaCount;
         shownWatched = summary.watchedCount;
         shownMinutes = summary.totalMinutes;
-        CharSequence rating = getText(R.string.g5_profile_metric_unrated);
+        CharSequence rating = getText(R.string.profile_metric_unrated);
         if (summary.averageRating != null) {
             SpannableStringBuilder formatted = new SpannableStringBuilder(
-                    String.format(Locale.US, getString(R.string.g5_profile_metric_rating_value),
+                    String.format(Locale.US, getString(R.string.profile_metric_rating_value),
                             summary.averageRating));
             int suffixStart = formatted.length();
-            formatted.append(getText(R.string.g5_profile_metric_rating_scale));
+            formatted.append(getText(R.string.profile_metric_rating_scale));
             formatted.setSpan(new TextAppearanceSpan(view.getContext(), R.style.TextAppearance_Group6_Caption),
                     suffixStart, formatted.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             rating = formatted;
@@ -287,7 +287,7 @@ public class ProfileFragment extends Fragment {
         NumberFormat number = NumberFormat.getIntegerInstance(Locale.US);
         setText(view, R.id.profile_genre_total, number.format(genreTotal));
         setText(view, R.id.profile_genre_total_label,
-                getResources().getQuantityText(R.plurals.g5_profile_genre_total_label, genreTotal));
+                getResources().getQuantityText(R.plurals.profile_genre_total_label, genreTotal));
         ViewCompat.setScreenReaderFocusable(view.findViewById(R.id.profile_genre_center), true);
         toggle.setOnClickListener(button -> showAllGenres(chart, counts));
         toggle.setVisibility(counts.size() > GENRE_PREVIEW_SIZE ? View.VISIBLE : View.GONE);
@@ -315,19 +315,19 @@ public class ProfileFragment extends Fragment {
 
         TextView note = new TextView(builder.getContext());
         TextViewCompat.setTextAppearance(note, R.style.TextAppearance_Group6_Caption);
-        note.setText(R.string.g5_profile_genre_share_note);
+        note.setText(R.string.profile_genre_share_note);
         content.addView(note);
-        dialog = builder.setTitle(R.string.g5_profile_all_genres_title)
+        dialog = builder.setTitle(R.string.profile_all_genres_title)
                 .setView(scroll)
-                .setPositiveButton(R.string.g5_profile_close_genres, null)
+                .setPositiveButton(R.string.profile_close_genres, null)
                 .show();
     }
 
     private void renderGenreLegend(TableLayout legend, DonutChartView chart, List<GenreCount> counts,
                                    int visibleCount, boolean insetGenre) {
         legend.removeAllViews();
-        addGenreRow(legend, getText(R.string.g5_profile_genre_column),
-                getText(R.string.g5_profile_titles_column), getText(R.string.g5_profile_share_column), null, insetGenre);
+        addGenreRow(legend, getText(R.string.profile_genre_column),
+                getText(R.string.profile_titles_column), getText(R.string.profile_share_column), null, insetGenre);
         View divider = new View(legend.getContext());
         divider.setBackgroundColor(ContextCompat.getColor(legend.getContext(), R.color.outline));
         divider.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -443,7 +443,7 @@ public class ProfileFragment extends Fragment {
         dialog = new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(action)
                 .setMessage(message)
-                .setNegativeButton(R.string.g5_profile_cancel, null)
+                .setNegativeButton(R.string.profile_cancel, null)
                 .setPositiveButton(action, (window, which) -> onConfirm.run())
                 .show();
     }

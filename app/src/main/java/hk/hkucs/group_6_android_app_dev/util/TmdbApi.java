@@ -67,7 +67,7 @@ public final class TmdbApi {
     }
 
     /**
-     * TMDB genre id -> the app's fixed vocabulary (see docs/sample-data.md
+     * TMDB genre id -> the app's fixed vocabulary (see the README's Sample data section
      * mapping table). Unmapped ids (Family, History, Music, Western, Kids, ...) are
      * dropped by returning null.
      */

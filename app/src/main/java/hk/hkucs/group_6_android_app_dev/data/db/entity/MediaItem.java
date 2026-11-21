@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 import java.util.ArrayList;
 import java.util.List;
 
-/** One movie or TV show in the user's library. Field meanings are documented in docs/data-api.md. */
+/** One movie or TV show in the user's library. Field meanings are documented in the README's Data API section. */
 @Entity(tableName = "media_item")
 public class MediaItem {
 

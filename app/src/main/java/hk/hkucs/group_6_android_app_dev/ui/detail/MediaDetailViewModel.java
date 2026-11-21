@@ -16,7 +16,7 @@ import hk.hkucs.group_6_android_app_dev.data.db.entity.MediaItem;
 import hk.hkucs.group_6_android_app_dev.data.db.entity.WatchRecord;
 import hk.hkucs.group_6_android_app_dev.data.repository.MediaRepository;
 
-/** One title plus its watch records. See docs/data-api.md. */
+/** One title plus its watch records. See the README's Data API section. */
 public class MediaDetailViewModel extends AndroidViewModel {
 
     private final MediaRepository repo;

@@ -96,7 +96,7 @@ The interface uses system typography, English labels and no downloaded font. Lab
 
 Open `app/src/main/res/layout/design_sample.xml` in Android Studio Split or Design. The preview declares the application theme. It includes all five text levels, palette swatches, four badges, selected/unselected filter chips, a read-only rating, fictional media card and FAB.
 
-The reusable `Widget.Group6.BottomNavigation` style is implemented for real in the app shell (see `docs/architecture.md`).
+The reusable `Widget.Group6.BottomNavigation` style is implemented for real in the app shell (see the Architecture section of the README).
 
 ## Verification
 
