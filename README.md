@@ -38,7 +38,7 @@ Track what you want to watch, are watching, and have watched; rate titles from 0
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Neilwwz3/group-6-android-app-dev.git
+   git clone https://github.com/Neilwwz3/group-5-android-app-dev.git
    ```
 2. Open the folder via **File → Open** and wait for Gradle sync to finish. Android Studio generates `local.properties` with your SDK path — never commit it.
 3. Pick an emulator or a connected device and press **Run**.
