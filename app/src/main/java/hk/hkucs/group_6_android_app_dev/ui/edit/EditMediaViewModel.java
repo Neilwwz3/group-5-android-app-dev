@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 import hk.hkucs.group_6_android_app_dev.data.db.entity.MediaItem;
 import hk.hkucs.group_6_android_app_dev.data.repository.MediaRepository;
 
-/** Loads the title being edited and saves it back. See docs/data-api.md. */
+/** Loads the title being edited and saves it back. See the README's Data API section. */
 public class EditMediaViewModel extends AndroidViewModel {
 
     private final MediaRepository repo;

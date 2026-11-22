@@ -22,7 +22,7 @@ import hk.hkucs.group_6_android_app_dev.data.repository.MediaRepository;
 
 /**
  * Library page data. {@code observeAllMedia} supplies the list; search, filtering and ordering
- * happen here, as documented in docs/data-api.md.
+ * happen here, as documented in the README's Data API section.
  */
 public class LibraryViewModel extends AndroidViewModel {
 

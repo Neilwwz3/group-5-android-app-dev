@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- G4 Diary page. Kept in its own file so edits never conflict with strings.xml. -->
+<!-- Diary page strings. Kept in their own file so edits never conflict with strings.xml. -->
 <resources>
     <plurals name="diary_heatmap_description">
         <item quantity="one">%d viewing day in the past year</item>

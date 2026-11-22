@@ -32,7 +32,7 @@ import hk.hkucs.group_6_android_app_dev.data.model.MediaStatus;
 import hk.hkucs.group_6_android_app_dev.data.model.MediaType;
 
 /**
- * G7: minimal TMDB v3 client built on HttpURLConnection + org.json (no third-party
+ * Minimal TMDB v3 client built on HttpURLConnection + org.json (no third-party
  * libraries). Only used while the user is looking a title up; everything it returns
  * is stored on the device, so the app stays local-first. The API key comes from
  * BuildConfig (local.properties) and is never written to the repository.
@@ -67,7 +67,7 @@ public final class TmdbApi {
     }
 
     /**
-     * TMDB genre id -> the app's fixed vocabulary (docs/tasks/D-1-sample-data.md
+     * TMDB genre id -> the app's fixed vocabulary (see the README's Sample data section
      * mapping table). Unmapped ids (Family, History, Music, Western, Kids, ...) are
      * dropped by returning null.
      */
@@ -136,7 +136,7 @@ public final class TmdbApi {
     }
 
     /**
-     * Fetches full details for one hit (fields mapped exactly like the D-1 sample
+     * Fetches full details for one hit (fields mapped exactly like the sample
      * pull) and downloads the w500 poster into the app's private files dir. The
      * returned item is ready to save; {@code id} is {@code "tmdb_<tmdbId>"} so a
      * title can never be stored twice.
@@ -251,7 +251,7 @@ public final class TmdbApi {
         List<String> result = new ArrayList<>();
         for (String name : mapped) {
             if (result.size() == 3) {
-                break; // D-1 rule: keep at most three, in TMDB order
+                break; // keep at most three genres, in TMDB order
             }
             result.add(name);
         }

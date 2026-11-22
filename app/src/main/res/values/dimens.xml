@@ -18,7 +18,6 @@
     <dimen name="poster_width">88dp</dimen>
     <dimen name="poster_height">132dp</dimen>
     <dimen name="touch_target">48dp</dimen>
-    <dimen name="swatch_width">32dp</dimen>
     <dimen name="icon_size">24dp</dimen>
     <dimen name="card_outline_width">1dp</dimen>
 </resources>
