@@ -53,6 +53,7 @@ public class ProfileFragment extends Fragment {
     private static final int MIN_SIDE_BY_SIDE_WIDTH_DP = 300;
     private static final float MAX_SIDE_BY_SIDE_FONT_SCALE = 1.1f;
     private static final long COUNT_UP_MS = 700;
+    private static final int[] COUNT_UP_LABELS = {R.id.profile_titles, R.id.profile_watched, R.id.profile_time};
     private AlertDialog dialog;
     /** Numbers currently shown in the overview, so updates count up from them. */
     private int shownTitles;
@@ -143,10 +144,7 @@ public class ProfileFragment extends Fragment {
 
     /** Rolls a number from {@code from} to {@code to}; jumps straight there when unchanged. */
     private void countUp(TextView label, int from, int to, IntFunction<CharSequence> format) {
-        Object running = label.getTag();
-        if (running instanceof ValueAnimator) {
-            ((ValueAnimator) running).cancel();
-        }
+        cancelCountUp(label);
         if (from == to) {
             label.setText(format.apply(to));
             return;
@@ -157,6 +155,13 @@ public class ProfileFragment extends Fragment {
         animator.addUpdateListener(a -> label.setText(format.apply((int) a.getAnimatedValue())));
         label.setTag(animator);
         animator.start();
+    }
+
+    private static void cancelCountUp(@Nullable TextView label) {
+        Object running = label == null ? null : label.getTag();
+        if (running instanceof ValueAnimator) {
+            ((ValueAnimator) running).cancel();
+        }
     }
 
     private void renderMonthly(View view, List<MonthTotal> totals) {
@@ -450,6 +455,14 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        // A count-up still running after a rotation or theme change would call getString()
+        // on this fragment once it is detached, which crashes.
+        View view = getView();
+        if (view != null) {
+            for (int id : COUNT_UP_LABELS) {
+                cancelCountUp(view.findViewById(id));
+            }
+        }
         if (dialog != null) {
             dialog.dismiss();
             dialog = null;
