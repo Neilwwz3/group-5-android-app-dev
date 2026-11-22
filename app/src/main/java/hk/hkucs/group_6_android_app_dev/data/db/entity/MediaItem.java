@@ -49,14 +49,17 @@ public class MediaItem {
     @ColumnInfo(name = "total_episodes")
     public Integer totalEpisodes;
 
-    /** File name of the poster, or null to show a placeholder. */
+    /**
+     * Sample-poster file name under assets/sample/posters/, or absolute path of a poster file
+     * in app-private storage (TMDB or picked from the device); null shows a placeholder.
+     */
     public String poster;
 
     /** One of {@link hk.hkucs.group_6_android_app_dev.data.model.MediaStatus}. */
     @NonNull
     public String status = "want";
 
-    /** 0–10 in steps of 1 (half stars); null means not rated. */
+    /** 0–10 with one decimal; null means not rated. */
     public Float rating;
 
     /** {@code manual} or {@code sample}. */

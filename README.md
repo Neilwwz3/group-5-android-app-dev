@@ -24,7 +24,7 @@ Track what you want to watch, are watching, and have watched; rate titles from 0
 | Language | Java 11 (no Kotlin sources) |
 | UI | XML layouts, Material Components (Material 3), AppCompat, ConstraintLayout |
 | Architecture | MVVM with ViewModel + LiveData; a single Repository as the data entry point |
-| Storage | Room (SQLite), local-only; `SharedPreferences` for settings |
+| Storage | Room (SQLite), local-only |
 | Build | Gradle wrapper (Kotlin DSL), Android Gradle Plugin; versions catalogued in [`gradle/libs.versions.toml`](gradle/libs.versions.toml) |
 | SDK | minSdk 24 · targetSdk 37 · compileSdk 37 |
 
@@ -32,7 +32,7 @@ Track what you want to watch, are watching, and have watched; rate titles from 0
 
 ### Requirements
 
-- Android Studio (Hedgehog or newer; the project uses AGP 9.x — check **Help → About** for the bundled JDK)
+- Android Studio Quail 4 (2026.1.4) or newer — the project uses AGP 9.4, and older releases cannot sync it ([compatibility table](https://developer.android.com/build/releases/about-agp))
 - JDK 17+ (Android Studio's bundled JDK works)
 - Android SDK 37 with build tools (Android Studio downloads these on first sync)
 
@@ -74,12 +74,12 @@ The app builds and runs without a key — the "Search titles online (TMDB)" entr
 | Data | Where it lives |
 | --- | --- |
 | Titles and viewing records | **Room** (androidx.room 2.8.x, on SQLite) |
-| Settings (e.g. whether sample data was loaded) | `SharedPreferences` |
-| Poster images | Files in the app's private directory; only the file name is stored in the database |
+| Sample posters | Bundled in `assets/sample/posters/`; the database stores the file name |
+| Posters downloaded from TMDB or picked from the device | Copied into the app's private `files/posters/` directory; the database stores the absolute path |
 
 Room was chosen because it is an official Jetpack component (not a third-party library), works offline, validates SQL at compile time, returns `LiveData` from DAOs so the UI refreshes automatically, and supports Java through `annotationProcessor`. Hand-written `SQLiteOpenHelper`, Realm / ObjectBox and DataStore were rejected for boilerplate, unnecessary dependency, and Kotlin-coroutine orientation respectively. Room stays on **2.x**; Room 3 targets Kotlin/KSP.
 
-Key dependencies: `androidx.room:room-runtime` + `room-compiler` (2.8.5), `lifecycle-viewmodel` / `lifecycle-livedata` (2.11.0), `androidx.fragment:fragment` (1.9.1). Charts are **not** drawn with a chart library — the rating widget, heatmap, donut chart and bar chart are custom views.
+Key dependencies: `androidx.room:room-runtime` + `room-compiler` (2.8.5), `lifecycle-viewmodel` / `lifecycle-livedata` (2.11.0), `androidx.fragment:fragment` (1.9.1). Charts are **not** drawn with a chart library — the heatmap, donut chart and bar chart are custom views.
 
 #### Schema
 
@@ -95,7 +95,7 @@ Key dependencies: `androidx.room:room-runtime` + `room-compiler` (2.8.5), `lifec
 | `overview` | TEXT | Synopsis |
 | `runtime_minutes` | INTEGER | Movie runtime / episode runtime |
 | `total_episodes` | INTEGER | Total episodes for series; null for movies |
-| `poster` | TEXT | Poster file name, nullable |
+| `poster` | TEXT | Sample-poster file name, or absolute path of a poster file in app-private storage; nullable |
 | `status` | TEXT | `want` / `watching` / `watched` / `dropped` |
 | `rating` | REAL | Current rating 0–10, nullable |
 | `source` | TEXT | `manual` / `sample` / `tmdb` |
@@ -121,7 +121,7 @@ List fields are deliberately not normalised into separate tables: the dataset is
 
 ```
 data/db/
-  AppDatabase.java          singleton, version = 1, exportSchema = true
+  AppDatabase.java          singleton, version = 1, exportSchema = false
   Converters.java           List<String> / List<Integer> ↔ TEXT
   entity/MediaItem.java
   entity/WatchRecord.java
@@ -129,7 +129,7 @@ data/db/
   dao/WatchRecordDao.java   records per title, per period, monthly totals
 data/repository/
   MediaRepository.java      the only data entry point for the UI; writes on a background thread
-  SettingsRepository.java   wraps SharedPreferences
+  SampleDataLoader.java     loads assets/sample/library.json
 ```
 
 Rules:
@@ -164,7 +164,7 @@ MainActivity (bottom navigation)
 - Search field (title / original title)
 - Filter: All / Want to Watch / Watching / Watched / Dropped
 - Cards: poster, title, "year · type · genres", star rating, status badge
-- Floating action button: add a title
+- "Add a title" button below the list
 - Tapping a card opens the detail screen
 
 #### Diary `ui/diary/`
@@ -191,10 +191,11 @@ MainActivity (bottom navigation)
 
 | Component | Used by |
 | --- | --- |
-| `RatingView`: 0–10 rating, five stars, half-star steps, read-only mode | Detail, log a watch, library cards |
 | `HeatmapView`: one-year viewing heatmap | Diary |
 | `DonutChartView`: genre donut | Profile |
 | `MonthlyBarChartView`: monthly totals | Profile |
+
+Ratings have no custom view: the detail, add/edit and log-a-watch screens take a number from 0 to 10 with one decimal in a text field, and library cards show it as five read-only stars (a standard `RatingBar`, half-star steps) next to the score.
 
 ### File naming
 
@@ -252,9 +253,9 @@ All UI text is English and lives in `strings.xml` (for example `status_want`).
 | `overview` | `String` | Synopsis |
 | `runtimeMinutes` | `Integer` | Movie or episode runtime, nullable |
 | `totalEpisodes` | `Integer` | Null for movies |
-| `poster` | `String` | Poster file name, nullable; the UI shows a placeholder when empty |
+| `poster` | `String` | Sample-poster file name or absolute file path, nullable; the UI shows a placeholder when empty |
 | `status` | `String` | One of `MediaStatus` |
-| `rating` | `Float` | 0–10 in steps of 1 (half a star); null means not rated |
+| `rating` | `Float` | 0–10 with one decimal; null means not rated |
 
 **`WatchRecord`**
 
@@ -338,7 +339,7 @@ File: `app/src/main/assets/sample/library.json` (`version: 1`). The dataset simu
 
 ### Coverage
 
-10 genres are used: Drama, Sci-Fi, Action, Mystery, Crime, Romance, Animation, Comedy, Fantasy, War.
+11 genres are used: Drama, Sci-Fi, Action, Mystery, Crime, Romance, Animation, Comedy, Fantasy, War, Horror.
 
 - 3 titles rated 9.5 or above: The Shawshank Redemption 9.7, Farewell My Concubine 9.6, Interstellar 9.5.
 - 3 titles below 5: Avengers: Endgame 4.0, Ready Player One 4.5, The Big Bang Theory 4.5 (all dropped).
