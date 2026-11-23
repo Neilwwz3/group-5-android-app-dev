@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/search_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touch_target"
+        app:navigationIcon="@drawable/ic_nav_back"
+        app:navigationContentDescription="@string/back"
+        app:titleTextAppearance="@style/TextAppearance.Group6.CardTitle" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:paddingBottom="@dimen/space_8">
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/tmdb_search_hint">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_query"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:imeOptions="actionSearch"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_button"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/tmdb_search_action" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/search_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:paddingTop="@dimen/space_8"
+        android:paddingBottom="@dimen/space_8"
+        android:textAppearance="@style/TextAppearance.Group6.Body"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/space_4"
+        android:paddingBottom="@dimen/space_8" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:paddingTop="@dimen/space_8"
+        android:paddingBottom="@dimen/space_8"
+        android:text="@string/tmdb_attribution"
+        android:textAppearance="@style/TextAppearance.Group6.Caption"
+        android:textColor="@color/text_secondary" />
+</LinearLayout>

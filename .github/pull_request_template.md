@@ -1,24 +1,18 @@
-<!-- 标题格式：<任务编号>: <做了什么>，例如 UI-1: 视觉规范和通用组件 -->
+## What & why
 
-## 对应任务卡
+Describe the change and the problem it solves. Link related issues if any.
 
-任务编号：（例如 UI-1，对应 `docs/tasks/UI-1-design-system.md`）
+## How it was tested
 
-## 做了什么
+- [ ] Builds successfully (`./gradlew assembleDebug`)
+- [ ] Ran on emulator/device and verified the affected flows
+- [ ] UI text is English and lives in `strings.xml`
+- [ ] No new dependencies or shared-file changes (or they are called out below)
 
-（两三句话说明）
+## Screenshots
 
-## 自查清单
+For UI changes, attach before/after screenshots.
 
-- [ ] 在 Android Studio 里编译通过，模拟器上能运行
-- [ ] 只改了任务卡“可以改”里列出的文件
-- [ ] 没有提交 `local.properties`、`build/`、APK、真实账号或服务器地址
-- [ ] 任务卡里每条验收标准都做到了，并在下面附了截图
+## Notes for the reviewer
 
-## 截图
-
-（按验收标准的编号逐条贴图）
-
-## 用了哪些 AI 工具，需要统筹特别留意的地方
-
-（例如：用 Codex 生成了布局；不确定某处写法是否合适）
+Anything unusual: shared files touched, data model impact, follow-up TODOs.
