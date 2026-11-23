@@ -19,14 +19,17 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // TMDB key is read from local.properties (gitignored) and never committed.
-        // Builds without a key (including CI) get an empty string and hide the
-        // online search entry. See README "TMDB API key" for how to enable it.
+        // TMDB key: a tmdbApiKey line in local.properties (gitignored) wins if present.
+        // Otherwise the build uses the reserved key below. It is committed on purpose so
+        // the COMP7506 teaching team can test online lookup without registering on TMDB,
+        // and it will be revoked after the course review; remove this fallback then.
+        // See README "TMDB online lookup".
+        val reservedTmdbKey = "1453dcbfca2c5b29667e6c75b9c934da"
         val localProps = Properties().apply {
             val file = rootProject.file("local.properties")
             if (file.exists()) file.inputStream().use { load(it) }
         }
-        val tmdbKey = localProps.getProperty("tmdbApiKey") ?: ""
+        val tmdbKey = localProps.getProperty("tmdbApiKey") ?: reservedTmdbKey
         buildConfigField("String", "TMDB_API_KEY", "\"$tmdbKey\"")
     }
 
