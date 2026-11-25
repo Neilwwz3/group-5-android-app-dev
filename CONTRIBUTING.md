@@ -7,7 +7,8 @@ team project, so the workflow below is what the team actually uses.
 
 1. Install Android Studio and sync the project (see the README for requirements).
 2. Build and run once before making changes: `./gradlew assembleDebug`.
-3. Optional: add your own TMDB v3 key to `local.properties` to test online lookup.
+3. Online lookup uses a reserved TMDB key for the course review (see the README).
+   To use your own key, add it to `local.properties`.
 
 ## Branch and pull request workflow
 
@@ -50,8 +51,9 @@ Gradle build scripts. Changes to them need explicit maintainer approval in the P
 
 ## Privacy and content rules
 
-- Never commit real server addresses, accounts, tokens or API keys. The TMDB key
-  belongs in `local.properties` only.
+- Never commit real server addresses, accounts, tokens or API keys. The one exception
+  is the reserved TMDB key in `app/build.gradle.kts`, kept for the course review and
+  revoked afterwards. Any other TMDB key belongs in `local.properties` only.
 - Movie/show metadata (titles, cast, posters) may only come from TMDB, and only via
   the sample-data generation script or the in-app lookup. Do not manually copy
   content from other sites.

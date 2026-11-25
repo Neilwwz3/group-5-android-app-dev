@@ -56,16 +56,26 @@ Track what you want to watch, are watching, and have watched; rate titles from 0
 ./gradlew connectedDebugAndroidTest   # instrumentation tests
 ```
 
-### TMDB API key (optional, enables online title lookup)
+### TMDB online lookup
 
-The app builds and runs without a key — the "Search titles online (TMDB)" entry is simply hidden. To enable it:
+Online title lookup works without any setup. For the COMP7506 review, `app/build.gradle.kts` includes a reserved TMDB API key, so a fresh clone builds with online lookup enabled. The key will be revoked after the review. After that, online lookup needs your own key (see below); everything else in the app works without one.
 
-1. Get a free v3 API key from [themoviedb.org](https://www.themoviedb.org/settings/api).
-2. Add one line to your **local** `local.properties` (already gitignored):
-   ```properties
-   tmdbApiKey=your_key_here
-   ```
-3. Sync Gradle and run. The key is injected into `BuildConfig` at build time and is never stored in the repository.
+To try it (needs an internet connection):
+
+1. Open **Library** and tap **Add a title** below the list.
+2. On the form, tap **Search titles online (TMDB)**.
+3. Enter a title, e.g. `dune`, tap **Search**, then tap a result.
+4. Title, year, type, genres, directors, cast, synopsis, runtime, episode count and poster are filled in. Check them and tap **Save**.
+
+Picking a title that is already in your library shows "This title is already in your library." and adds nothing. Without a connection, the app says search needs a network connection, and you can still fill in the form by hand.
+
+To use your own key instead, get a free v3 API key from [themoviedb.org](https://www.themoviedb.org/settings/api) and add one line to your **local** `local.properties` (already gitignored). It takes precedence over the reserved key:
+
+```properties
+tmdbApiKey=your_key_here
+```
+
+Then sync Gradle and run. The key is injected into `BuildConfig` at build time.
 
 ## Architecture
 
